@@ -1,0 +1,4 @@
+INSERT INTO Inventory (title, author, genre, publication_date, isbn) VALUES ('1984', 'George Orwell', 'Dystopian', TO_DATE('1949-06-08', 'YYYY-MM-DD'), '978-0-452-28423-4');
+INSERT INTO Inventory (title, author, genre, publication_date, isbn) VALUES ('The Great Gatsby', 'F. Scott Fitzgerald', 'Classic', TO_DATE('1925-04-10', 'YYYY-MM-DD'), '978-0-7432-7356-5');
+INSERT INTO Inventory (title, author, genre, publication_date, isbn) VALUES ('Moby Dick', 'Herman Melville', 'Adventure', TO_DATE('1851-10-18', 'YYYY-MM-DD'), '978-0-14-243724-7');
+INSERT INTO Inventory (title, author, genre, publication_date, isbn) VALUES ('Pride and Prejudice', 'Jane Austen', 'Romance', TO_DATE('1813-01-28', 'YYYY-MM-DD'), '978-0-14-104034-8');

@@ -1,0 +1,98 @@
+pipeline {
+    agent any
+
+    environment {
+        SCANNER_HOME = tool 'SonarQubeScanner'
+        NEXUS_VERSION = "nexus3"
+        NEXUS_PROTOCOL = "http"
+        NODEJS_HOME = tool name: 'NodeJS' // Assumes NodeJS is configured in Jenkins tools
+        PATH = "${NODEJS_HOME}/bin:${env.PATH}"
+        SONARQUBE_SERVER = 'SonarQube'  // Name configured for SonarQube in Jenkins
+        NEXUS_URL = 'localhost:8081' // Nexus URL
+        NEXUS_REPO = 'npm-book-repo'
+        NEXUS_CREDENTIALS_ID = 'nexus-user-credentials' // Jenkins credentials ID for Nexus
+    }
+
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                sh 'npm run build'  // Assumes build command is defined in package.json
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    // Run SonarQube analysis for Node.js project
+                    sh """
+                        ${SCANNER_HOME}/bin/sonar-scanner \
+                        -Dsonar.projectKey=My-Project \
+                        -Dsonar.projectName="My-Project" \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.login=squ_1285b37cd202643af862a62667b4edb25a266d3d
+                    """
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                script {
+                    timeout(time: 1, unit: 'MINUTES') {
+                        waitForQualityGate abortPipeline: true
+                    }
+                }
+            }
+        }
+        
+        stage('Archive Artifact') {
+            steps {
+                archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: true
+            }
+        }
+
+        stage('Deploy to Nexus') {
+            steps {
+                nexusArtifactUploader(
+                    nexusVersion: "${NEXUS_VERSION}",
+                    artifacts: [
+                        [
+                            artifactId: 'my-app',
+                            classifier: '',
+                            file: 'dist/my-app.zip',
+                            type: 'zip'
+                        ]
+                    ],
+                    credentialsId: "${NEXUS_CREDENTIALS_ID}",
+                    groupId: 'com.example',
+                    protocol: "${NEXUS_PROTOCOL}",
+                    nexusUrl: "${NEXUS_URL}",
+                    repository: "${NEXUS_REPO}",
+                    version: '1.0.0'
+                )
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed.'
+        }
+    }
+}
