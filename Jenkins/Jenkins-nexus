@@ -46,7 +46,8 @@ pipeline {
                         -Dsonar.projectKey=Book-API \
                         -Dsonar.sources=. \
                         -Dsonar.host.url=http://localhost:9000 \
-                        -Dsonar.login=squ_1285b37cd202643af862a62667b4edb25a266d3d
+                        -Dsonar.login=squ_1285b37cd202643af862a62667b4edb25a266d3d \
+                        -Dsonar.exclusions=**/node_modules/**
                     """
                 }
             }
