@@ -37,7 +37,7 @@ pipeline {
             steps {
                 nodejs(nodeJSInstallationName: 'nodejs'){
                     sh "npm install"
-                    withSonarQubeEnv(credentialsId: 'SonarQube_Token') {
+                    withSonarQubeEnv('SonarQube') {
                         sh "npm install sonar-scanner"
                         sh """
                             ${SCANNER_HOME}/bin/sonar-scanner \
@@ -47,7 +47,7 @@ pipeline {
                             -Dsonar.login=squ_1285b37cd202643af862a62667b4edb25a266d3d
                         """
                         sh "npm run sonar"
-                }
+                    }
                 }
                
             }
