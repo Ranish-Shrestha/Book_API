@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs('NodeJS')
+    }
+
     environment {
         SCANNER_HOME = tool 'SonarQubeScanner'
         NEXUS_VERSION = "nexus3"
@@ -35,11 +39,13 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                nodejs(nodeJSInstallationName: 'NodeJS'){
-                    withSonarQubeEnv('SonarQube') {
-                        sh "npm install sonar-scanner"
-                        sh "npm run sonar-scanner"
-                    }
+                withSonarQubeEnv("${SONARQUBE_SERVER}") {
+                        bat """
+                        ${SCANNER_HOME}/bin/sonar-scanner \
+                        -D sonar.projectKey=Book-API \
+                        -D sonar.host.url=http://localhost:9000 \
+                        -D sonar.login=squ_1285b37cd202643af862a62667b4edb25a266d3d
+                    """
                 }
                
             }
