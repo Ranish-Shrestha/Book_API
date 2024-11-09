@@ -41,17 +41,11 @@ pipeline {
             steps { 
                 script { 
                     withSonarQubeEnv('SonarQube') { 
-                        sh """ 
-                        ${SCANNER_HOME}/bin/sonar-scanner \ 
-                        -Dsonar.projectKey=Book_API \ 
-                        -Dsonar.projectName="Book_API" \ 
-                        -Dsonar.projectVersion=1.0 \ 
-                        -Dsonar.sources=. \ 
-                        -Dsonar.sourceEncoding=UTF-8 \ 
-                        -Dsonar.host.url=http://localhost:9000 \ 
-                        -Dsonar.login=squ_e8d31cc53db724500f9f9021d1d07576b0b33b66 \ 
-                        -Dsonar.exclusions=**/node_modules/** 
-                        """ 
+                        sh """${SCANNER_HOME}/bin/sonar-scanner -Dsonar.host.url=http://localhost:9000/ \
+                        -Dsonar.login=squ_e8d31cc53db724500f9f9021d1d07576b0b33b66 \
+                        -Dsonar.projectName="Book_API" \
+                        -Dsonar.exclusions=**/node_modules/** \
+                        -Dsonar.projectKey=Book_API"""
                     } 
                 } 
             }
