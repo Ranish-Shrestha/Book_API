@@ -35,7 +35,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                nodejs(installationName: 'nodejs'){
+                nodejs(nodeJSInstallationName: 'nodejs'){
                     sh "npm install"
                     withSonarQubeEnv(credentialsId: 'SonarQube_Token') {
                         sh "npm install sonar-scanner"
