@@ -39,17 +39,13 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                    echo "${SCANNER_HOME}"
-                    sh """
-                        ${SCANNER_HOME}/bin/sonar-scanner \
-                        -Dsonar.projectKey=Book-API \
-                        -Dsonar.sources=. \
-                        -Dsonar.host.url=http://localhost:9000 \
-                        -Dsonar.login=squ_1285b37cd202643af862a62667b4edb25a266d3d \
-                        -Dsonar.exclusions=**/node_modules/**
-                    """
-                }
+                sh """
+                    ${SCANNER_HOME}/bin/sonar-scanner -Dsonar.host.url=http://localhost:9000 \
+                    -Dsonar.projectKey=Book-API \
+                    -Dsonar.sources=. \
+                    -Dsonar.login=squ_e8d31cc53db724500f9f9021d1d07576b0b33b66 \
+                    -Dsonar.exclusions=**/node_modules/**
+                """
             }
         }
 
