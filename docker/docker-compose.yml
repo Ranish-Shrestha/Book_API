@@ -18,7 +18,7 @@ services:
     ports:
       - "9000:9000"
     environment:
-      SONARQUBE_JDBC_URL: jdbc:postgresql://localhost:5432/booksecondbind
+      SONARQUBE_JDBC_URL: jdbc:postgresql://db:5432/booksecondbind
       SONARQUBE_JDBC_USERNAME: sonaradmin
       SONARQUBE_JDBC_PASSWORD: sonaradmin
     depends_on:
@@ -31,6 +31,8 @@ services:
       POSTGRES_USER: sonaradmin
       POSTGRES_PASSWORD: sonaradmin
       POSTGRES_DB: booksecondbind
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   nexus:
     image: sonatype/nexus3:latest
@@ -43,3 +45,4 @@ services:
 volumes:
   jenkins_home:
   nexus-data:
+  postgres_data:
