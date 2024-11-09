@@ -51,21 +51,21 @@ pipeline {
             }
         }
 
-    //     stage('Quality Gate') {
-    //         steps {
-    //             script {
-    //                 timeout(time: 1, unit: 'MINUTES') {
-    //                     waitForQualityGate abortPipeline: true
-    //                 }
-    //             }
-    //         }
-    //     }
+        stage('Quality Gate') {
+            steps {
+                script {
+                    timeout(time: 1, unit: 'MINUTES') {
+                        waitForQualityGate abortPipeline: true
+                    }
+                }
+            }
+        }
         
-    //     stage('Archive Artifact') {
-    //         steps {
-    //             archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: true
-    //         }
-    //     }
+        stage('Archive Artifact') {
+            steps {
+                archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: true
+            }
+        }
 
     //     stage('Deploy to Nexus') {
     //         steps {
