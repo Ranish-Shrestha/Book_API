@@ -16,4 +16,4 @@ app.get('/', (req, res) => {
     res.send('API is running');
 })
 
-const server = app.listen(PORT, console.log(`Server started on ${PORT}`));
+const server = app.listen(PORT, console.log(`Server started on http://localhost:${PORT}`));
