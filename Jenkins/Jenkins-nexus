@@ -39,13 +39,6 @@ pipeline {
                     sh "npm install"
                     withSonarQubeEnv('SonarQube') {
                         sh "npm install sonar-scanner"
-                        sh """
-                            ${SCANNER_HOME}/bin/sonar-scanner \
-                            -Dsonar.projectKey=My-Project \
-                            -Dsonar.projectName="My-Project" \
-                            -Dsonar.host.url=http://localhost:9000 \
-                            -Dsonar.login=squ_1285b37cd202643af862a62667b4edb25a266d3d
-                        """
                         sh "npm run sonar"
                     }
                 }
