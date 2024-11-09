@@ -41,7 +41,7 @@ pipeline {
             steps { 
                 script { 
                     withSonarQubeEnv('SonarQube') { 
-                        sh """${SCANNER_HOME}/bin/sonar-scanner -Dsonar.host.url=http://localhost:9000/ \
+                        sh """${SCANNER_HOME}/bin/sonar-scanner -Dsonar.host.url=http://10.0.0.247:9000/ \
                         -Dsonar.login=squ_ee990db47a9bdffa732b9fea384c2782eb8e56e1 \
                         -Dsonar.projectName="Book_API" \
                         -Dsonar.exclusions=**/node_modules/** \
