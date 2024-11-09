@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "build": "npm install --legacy-peer-deps"
+    "build": "npm install"
   },
   "author": "Ranish Shrestha",
   "license": "ISC",
