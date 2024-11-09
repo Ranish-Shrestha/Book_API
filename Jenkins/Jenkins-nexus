@@ -40,7 +40,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                        bat """
+                    sh """
                         ${SCANNER_HOME}/bin/sonar-scanner \
                         -D sonar.projectKey=Book-API \
                         -D sonar.host.url=http://localhost:9000 \
