@@ -27,25 +27,33 @@ pipeline {
         
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                nodejs(nodeJSInstallationName: 'NodeJS') { 
+                    sh 'npm install' 
+                }
             }
         }
         
         stage('Build') {
             steps {
-                sh 'npm run build'  // Assumes build command is defined in package.json
+                nodejs(nodeJSInstallationName: 'NodeJS') { 
+                    sh 'npm run build' 
+                }
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                    sh """
-                        ${SCANNER_HOME}/bin/sonar-scanner \
-                        -D sonar.projectKey=Book-API \
-                        -D sonar.host.url=http://localhost:9000 \
-                        -D sonar.login=squ_1285b37cd202643af862a62667b4edb25a266d3d
-                    """
+                nodejs(nodeJSInstallationName: 'NodeJS') {
+                    withSonarQubeEnv("${SONARQUBE_SERVER}") {
+                        sh "npm install sonar-scanner" 
+                        sh "npm run sonar"
+                        sh """
+                            ${SCANNER_HOME}/bin/sonar-scanner \
+                            -D sonar.projectKey=Book-API \
+                            -D sonar.host.url=http://localhost:9000 \
+                            -D sonar.login=squ_1285b37cd202643af862a62667b4edb25a266d3d
+                        """
+                    }
                 }
                
             }
