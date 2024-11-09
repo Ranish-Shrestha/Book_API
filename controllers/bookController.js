@@ -64,7 +64,7 @@ const updateBooK = asyncHandler(async (req, res) => {
             return res.status(400).json({ error: 'Enter all required fields' });
         }
 
-        const updateBook = await pool.query(
+        await pool.query(
             "UPDATE inventory SET title = $1, author = $2, genre = $3, publication_date = $4, isbn = $5 WHERE entry_id = $6",
             [title, author, genre, publicationDate, isbn, id]
         );
@@ -81,7 +81,7 @@ const updateBooK = asyncHandler(async (req, res) => {
 const deleteBooK = asyncHandler(async (req, res) => {
     try {
         const { id } = req.params;
-        const deletebook = await pool.query("DELETE FROM inventory WHERE entry_id =$1", [id]);
+        await pool.query("DELETE FROM inventory WHERE entry_id =$1", [id]);
 
         res.status(204).json("Book details deleted successfully.")
     } catch (error) {
