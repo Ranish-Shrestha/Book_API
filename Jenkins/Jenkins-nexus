@@ -40,11 +40,11 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv("${SONARQUBE_SERVER}") {
+                    echo "${SCANNER_HOME}"
                     sh """
-                        ${tool('SonarQubeScanner')}/bin/sonar-scanner \
+                        ${SCANNER_HOME}/bin/sonar-scanner \
                         -Dsonar.projectKey=Book-API \
                         -Dsonar.sources=. \
-                        -Dsonar.css.node=. \
                         -Dsonar.host.url=http://localhost:9000 \
                         -Dsonar.login=squ_1285b37cd202643af862a62667b4edb25a266d3d
                     """
