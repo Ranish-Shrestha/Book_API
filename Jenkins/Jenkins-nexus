@@ -33,20 +33,21 @@ pipeline {
             }
         }
 
-    //     stage('SonarQube Analysis') {
-    //         steps {
-    //             script {
-    //                 // Run SonarQube analysis for Node.js project
-    //                 sh """
-    //                     ${SCANNER_HOME}/bin/sonar-scanner \
-    //                     -Dsonar.projectKey=My-Project \
-    //                     -Dsonar.projectName="My-Project" \
-    //                     -Dsonar.host.url=http://localhost:9000 \
-    //                     -Dsonar.login=squ_1285b37cd202643af862a62667b4edb25a266d3d
-    //                 """
-    //             }
-    //         }
-    //     }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv(credentialsId: 'SonarQube_Token') {
+                    sh "npm install sonar-scanner"
+                    sh """
+                        ${SCANNER_HOME}/bin/sonar-scanner \
+                        -Dsonar.projectKey=My-Project \
+                        -Dsonar.projectName="My-Project" \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.login=squ_1285b37cd202643af862a62667b4edb25a266d3d
+                    """
+                    sh "npm run sonar"
+                }
+            }
+        }
 
     //     stage('Quality Gate') {
     //         steps {
