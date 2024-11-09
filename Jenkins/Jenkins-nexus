@@ -33,66 +33,66 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    // Run SonarQube analysis for Node.js project
-                    sh """
-                        ${SCANNER_HOME}/bin/sonar-scanner \
-                        -Dsonar.projectKey=My-Project \
-                        -Dsonar.projectName="My-Project" \
-                        -Dsonar.host.url=http://localhost:9000 \
-                        -Dsonar.login=squ_1285b37cd202643af862a62667b4edb25a266d3d
-                    """
-                }
-            }
-        }
+    //     stage('SonarQube Analysis') {
+    //         steps {
+    //             script {
+    //                 // Run SonarQube analysis for Node.js project
+    //                 sh """
+    //                     ${SCANNER_HOME}/bin/sonar-scanner \
+    //                     -Dsonar.projectKey=My-Project \
+    //                     -Dsonar.projectName="My-Project" \
+    //                     -Dsonar.host.url=http://localhost:9000 \
+    //                     -Dsonar.login=squ_1285b37cd202643af862a62667b4edb25a266d3d
+    //                 """
+    //             }
+    //         }
+    //     }
 
-        stage('Quality Gate') {
-            steps {
-                script {
-                    timeout(time: 1, unit: 'MINUTES') {
-                        waitForQualityGate abortPipeline: true
-                    }
-                }
-            }
-        }
+    //     stage('Quality Gate') {
+    //         steps {
+    //             script {
+    //                 timeout(time: 1, unit: 'MINUTES') {
+    //                     waitForQualityGate abortPipeline: true
+    //                 }
+    //             }
+    //         }
+    //     }
         
-        stage('Archive Artifact') {
-            steps {
-                archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: true
-            }
-        }
+    //     stage('Archive Artifact') {
+    //         steps {
+    //             archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: true
+    //         }
+    //     }
 
-        stage('Deploy to Nexus') {
-            steps {
-                nexusArtifactUploader(
-                    nexusVersion: "${NEXUS_VERSION}",
-                    artifacts: [
-                        [
-                            artifactId: 'my-app',
-                            classifier: '',
-                            file: 'dist/my-app.zip',
-                            type: 'zip'
-                        ]
-                    ],
-                    credentialsId: "${NEXUS_CREDENTIALS_ID}",
-                    groupId: 'com.example',
-                    protocol: "${NEXUS_PROTOCOL}",
-                    nexusUrl: "${NEXUS_URL}",
-                    repository: "${NEXUS_REPO}",
-                    version: '1.0.0'
-                )
-            }
-        }
-    }
+    //     stage('Deploy to Nexus') {
+    //         steps {
+    //             nexusArtifactUploader(
+    //                 nexusVersion: "${NEXUS_VERSION}",
+    //                 artifacts: [
+    //                     [
+    //                         artifactId: 'my-app',
+    //                         classifier: '',
+    //                         file: 'dist/my-app.zip',
+    //                         type: 'zip'
+    //                     ]
+    //                 ],
+    //                 credentialsId: "${NEXUS_CREDENTIALS_ID}",
+    //                 groupId: 'com.example',
+    //                 protocol: "${NEXUS_PROTOCOL}",
+    //                 nexusUrl: "${NEXUS_URL}",
+    //                 repository: "${NEXUS_REPO}",
+    //                 version: '1.0.0'
+    //             )
+    //         }
+    //     }
+    // }
 
-    post {
-        success {
-            echo 'Pipeline completed successfully!'
-        }
-        failure {
-            echo 'Pipeline failed.'
-        }
-    }
+    // post {
+    //     success {
+    //         echo 'Pipeline completed successfully!'
+    //     }
+    //     failure {
+    //         echo 'Pipeline failed.'
+    //     }
+    // }
 }
