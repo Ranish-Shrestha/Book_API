@@ -53,22 +53,21 @@ pipeline {
 
         stage('Quality Gate') {
             steps {
-                script { // Retry the Quality Gate check a few times if necessary 
-                    retry(3) {
-                        sleep(time: 20, unit: 'SECONDS')
-                        // Retry up to 3 times with a delay in between 
-                        def qualityGate = waitForQualityGate() 
-                        if (qualityGate.status == 'IN_PROGRESS') { 
-                            sleep(time: 20, unit: 'SECONDS') // Sleep to wait for the status to update 
-                            error "Quality Gate is still in progress. Retrying..." 
-                        } 
-                        else if (qualityGate.status != 'OK') { 
-                            error "Quality Gate failed: ${qualityGate.status}" 
-                        } 
-                        else { 
-                            echo "Quality Gate passed: ${qualityGate.status}" 
-                        } 
+                script {
+                    sleep(time: 20, unit: 'SECONDS') // Sleep to wait for the status to update 
+                    def qualityGate = waitForQualityGate() 
+                    if (qualityGate.status == 'IN_PROGRESS') { 
+                        sleep(time: 20, unit: 'SECONDS') // Sleep to wait for the status to update 
+                        qualityGate = waitForQualityGate()
+                        error "Quality Gate is still in progress. Retrying..." 
                     } 
+                    
+                    if (qualityGate.status != 'OK') { 
+                        error "Quality Gate failed: ${qualityGate.status}" 
+                    } 
+                    else { 
+                        echo "Quality Gate passed: ${qualityGate.status}" 
+                    }  
                 }
             }
         }
