@@ -33,7 +33,10 @@ pipeline {
         
         stage('Build') {
             steps {
-                sh 'npm run build'
+                withCredentials([file(credentialsId: 'npm-nexus-creds', variable: 'mynpmrc')]) {
+                    echo 'Building...'
+                    sh 'npm install --userconfig $mynpmrc --registry http://10.0.0.247:8081/repository/npm-book-repo --loglevel verbose'
+                }
             }
         }
 
@@ -71,31 +74,13 @@ pipeline {
             }
         }
         
-        stage('Archive Artifact') {
-            steps {
-                archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: true
-            }
-        }
 
-        stage('Deploy to Nexus') {
+        stage('Publish to Nexus') {
             steps {
-                nexusArtifactUploader(
-                    nexusVersion: "${NEXUS_VERSION}",
-                    artifacts: [
-                        [
-                            artifactId: 'my-app',
-                            classifier: '',
-                            file: 'dist/my-app.zip',
-                            type: 'zip'
-                        ]
-                    ],
-                    credentialsId: "${NEXUS_CREDENTIALS_ID}",
-                    groupId: 'com.example',
-                    protocol: "${NEXUS_PROTOCOL}",
-                    nexusUrl: "${NEXUS_URL}",
-                    repository: "${NEXUS_REPO}",
-                    version: '1.0.0'
-                )
+                withCredentials([file(credentialsId: 'npm-nexus-creds', variable: 'mynpmrc')]) {
+                    echo 'Publishing to Nexus...'
+                    sh 'npm publish --userconfig $mynpmrc --loglevel verbose'
+                }
             }
         }
     }
