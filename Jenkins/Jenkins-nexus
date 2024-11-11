@@ -51,15 +51,15 @@ pipeline {
             }
         }
 
-        // stage('Quality Gate') {
-        //     steps {
-        //         script {
-        //             timeout(time: 2, unit: 'MINUTES') {
-        //                 waitForQualityGate abortPipeline: true
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Quality Gate') {
+            steps {
+                script {
+                    timeout(time: 2, unit: 'MINUTES') {
+                        waitForQualityGate abortPipeline: true
+                    }
+                }
+            }
+        }
         
         stage('Archive Artifact') {
             steps {
@@ -67,27 +67,27 @@ pipeline {
             }
         }
 
-    //     stage('Deploy to Nexus') {
-    //         steps {
-    //             nexusArtifactUploader(
-    //                 nexusVersion: "${NEXUS_VERSION}",
-    //                 artifacts: [
-    //                     [
-    //                         artifactId: 'my-app',
-    //                         classifier: '',
-    //                         file: 'dist/my-app.zip',
-    //                         type: 'zip'
-    //                     ]
-    //                 ],
-    //                 credentialsId: "${NEXUS_CREDENTIALS_ID}",
-    //                 groupId: 'com.example',
-    //                 protocol: "${NEXUS_PROTOCOL}",
-    //                 nexusUrl: "${NEXUS_URL}",
-    //                 repository: "${NEXUS_REPO}",
-    //                 version: '1.0.0'
-    //             )
-    //         }
-    //     }
+        stage('Deploy to Nexus') {
+            steps {
+                nexusArtifactUploader(
+                    nexusVersion: "${NEXUS_VERSION}",
+                    artifacts: [
+                        [
+                            artifactId: 'my-app',
+                            classifier: '',
+                            file: 'dist/my-app.zip',
+                            type: 'zip'
+                        ]
+                    ],
+                    credentialsId: "${NEXUS_CREDENTIALS_ID}",
+                    groupId: 'com.example',
+                    protocol: "${NEXUS_PROTOCOL}",
+                    nexusUrl: "${NEXUS_URL}",
+                    repository: "${NEXUS_REPO}",
+                    version: '1.0.0'
+                )
+            }
+        }
     }
 
     // post {
