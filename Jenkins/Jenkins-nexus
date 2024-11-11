@@ -1,10 +1,5 @@
 pipeline {
-    agent { 
-        docker { 
-            image 'circleci/node:latest' // Use a Docker image that includes Node.js and zip utility 
-            args '-u root' // Run as root user 
-        }
-    }
+    agent any
 
     tools {
         nodejs('NodeJS')
