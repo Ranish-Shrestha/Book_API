@@ -21,7 +21,7 @@ pipeline {
     stages {
         stage('Install zip Utility') { 
             steps { 
-                sh "apt-get update && apt-get install -y zip"     
+                sh "apt-get install -y zip"     
             }
         }
 
