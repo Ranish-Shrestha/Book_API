@@ -54,7 +54,8 @@ pipeline {
         stage('Quality Gate') {
             steps {
                 script { // Retry the Quality Gate check a few times if necessary 
-                    retry(3) { 
+                    retry(3) {
+                        sleep(time: 20, unit: 'SECONDS')
                         // Retry up to 3 times with a delay in between 
                         def qualityGate = waitForQualityGate() 
                         if (qualityGate.status == 'IN_PROGRESS') { 
