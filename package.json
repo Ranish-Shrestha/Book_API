@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "build": "mkdir -p dist && npm install && zip -r dist/my-app.zip"
+    "build": "mkdir -p dist && npm install"
   },
   "author": "Ranish Shrestha",
   "license": "ISC",

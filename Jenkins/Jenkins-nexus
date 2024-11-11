@@ -19,12 +19,6 @@ pipeline {
 
     
     stages {
-        stage('Install zip Utility') { 
-            steps { 
-                sh "apt-get install -y zip"     
-            }
-        }
-
         stage('Checkout') {
             steps {
                 checkout scm
@@ -40,6 +34,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'npm run build' 
+                sh 'zip -r dist/my-app.zip'
             }
         }
 
