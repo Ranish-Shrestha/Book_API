@@ -33,8 +33,7 @@ pipeline {
         
         stage('Build') {
             steps {
-                sh 'npm run build' 
-                sh 'zip -r dist/my-app.zip'
+                sh 'npm run build'
             }
         }
 
