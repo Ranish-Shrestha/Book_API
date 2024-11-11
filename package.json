@@ -7,6 +7,9 @@
     "start": "node server.js",
     "build": "mkdir -p dist && npm install && zip -r dist/my-app.zip ."
   },
+  "publishConfig": {
+    "registry": "http://10.0.0.247:8081/repository/npm-book-repo/"
+  },
   "author": "Ranish Shrestha",
   "license": "ISC",
   "dependencies": {
