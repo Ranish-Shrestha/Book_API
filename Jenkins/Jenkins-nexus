@@ -19,12 +19,6 @@ pipeline {
 
     
     stages {
-        stage('Prepare Environment') {
-            steps { // install zip
-                sh 'sudo apt-get update && sudo apt-get install -y zip'
-            }
-        }
-
         stage('Checkout') {
             steps {
                 checkout scm
@@ -34,6 +28,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh 'npm install' 
+                sh 'npm install --save-dev zip-cli'
             }
         }
         
