@@ -19,6 +19,12 @@ pipeline {
 
     
     stages {
+        stage('Prepare Environment') {
+            steps { // install zip
+                sh 'sudo apt-get update && sudo apt-get install -y zip'
+            }
+        }
+
         stage('Checkout') {
             steps {
                 checkout scm
