@@ -48,7 +48,7 @@ pipeline {
                     withSonarQubeEnv('SonarQube') { 
                         sh """${SCANNER_HOME}/bin/sonar-scanner -Dsonar.host.url=http://localhost:9000/ \
                         -Dsonar.token=squ_55b9cb9407d8c5810b57b10a9ea114c652611367 \
-                        -Dsonar.projectName="Book_API" \ \
+                        -Dsonar.projectName="Book_API" \
                         -Dsonar.projectKey=Book_API"""
                     } 
                 } 
