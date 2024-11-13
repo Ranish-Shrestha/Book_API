@@ -64,7 +64,7 @@ pipeline {
                         error "Quality Gate is still in progress. Retrying..." 
                     } 
                     
-                    if (qualityGate.status != 'OK') { 
+                    if (qualityGate.status != 'OK' || qualityGate.status != 'SUCCESS') { 
                         error "Quality Gate failed: ${qualityGate.status}" 
                     } 
                     else { 
