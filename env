@@ -1,0 +1,4 @@
+PSQL_URL=localhost
+PSQL_USERNAME=postgres
+PSQL_PASSWORD=root
+PSQL_DATABASE=books
