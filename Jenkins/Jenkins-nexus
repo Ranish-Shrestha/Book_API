@@ -60,8 +60,7 @@ pipeline {
                 script {
                     sleep(time: 20, unit: 'SECONDS') // Sleep to wait for the status to update 
                     def qualityGate = waitForQualityGate() 
-                    if (qualityGate.status == 'IN_PROGRESS') { 
-                        sleep(time: 20, unit: 'SECONDS') // Sleep to wait for the status to update 
+                    if (qualityGate.status == 'IN_PROGRESS') {  
                         error "Quality Gate is still in progress. Retrying..." 
                     } 
                     
