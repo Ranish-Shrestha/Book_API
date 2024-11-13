@@ -5,7 +5,7 @@ const pool = new Pool({
     password: "root", // psql password
     host: "localhost", // location of psql hosted
     port: 5432, // default port
-    database: "booksecondbind" // database name
+    database: "books" // database name
 })
 
 

@@ -1,4 +1,4 @@
-CREATE DATABASE booksecondbind;
+CREATE DATABASE books;
 
 CREATE TABLE inventory (
   entry_id SERIAL PRIMARY KEY,

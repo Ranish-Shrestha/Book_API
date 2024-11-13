@@ -1,5 +1,19 @@
 # Book API
 
+### Create database user and database
+
+Open pgAdmin. Right Click on Login/Group Roles, click on Create and click on Login/Group Role.
+![Postgres_User](images/Postgres_User.png)
+
+Enter Name.
+![Postgres_Username](images/Postgres_Username.png)
+
+Navigate to Definition and enter Password.
+![Postgres_Password](images/Postgres_Password.png)
+
+Navigate to Privileges and give Superuser and Login privileges.
+![Postgres_Privileges](images/Postgres_Privileges.png)
+
 ### Make `docker-compose.yml` file
 
 ```sh
@@ -23,7 +37,7 @@ services:
     ports:
       - "9000:9000"
     environment:
-      SONARQUBE_JDBC_URL: jdbc:postgresql://db:5432/booksecondbind #here 'booksecondbind' is databasename
+      SONARQUBE_JDBC_URL: jdbc:postgresql://db:5432/books #here 'books' is databasename
       SONARQUBE_JDBC_USERNAME: sonaradmin
       SONARQUBE_JDBC_PASSWORD: sonaradmin
     depends_on:
@@ -35,7 +49,7 @@ services:
     environment:
       POSTGRES_USER: sonaradmin
       POSTGRES_PASSWORD: sonaradmin
-      POSTGRES_DB: booksecondbind
+      POSTGRES_DB: books
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -72,23 +86,23 @@ docker-compose up -d
 
 - Go to http://localhost:9000 or http://your-localhost:9000.
 - Go to Administration -> Security -> Users and Click on `Update Tokens`.
-  ![sonarqube](sonarqube.png)
+  ![sonarqube](images/sonarqube.png)
 - Enter `Token Name`, choose `Expires in` and click `Generate` button. Copy New token.
-  ![sonarqube_token](sonarqube_token.png)
+  ![sonarqube_token](images/sonarqube_token.png)
 - Go to Manage Jenkins -> Credentials -> Cick on global and Add New credentials for SonarQube.
-  ![sonarqube_creds](sonarqube_creds.png)
+  ![sonarqube_creds](images/sonarqube_creds.png)
 - Go to Manage Jenkins -> System. Configure Server URL and authentication token.
-  ![sonarqube_config](sonarqube_config.png)
+  ![sonarqube_config](images/sonarqube_config.png)
 
 ### Configure Nexus
 
 - Go to http://localhost:8081 or http://your-localhost:8081. Add Create three repositories. [Link](https://www.sonatype.com/blog/using-sonatype-nexus-repository-3-part-2-npm-packages)
-  ![Nexus](Nexus.png)
+  ![Nexus](images/Nexus.png)
 - For group repository, add proxy and hosted repositories as members.
-  ![Nexus_group](Nexus_group.png)
+  ![Nexus_group](images/Nexus_group.png)
 - Go to Security -> Users. Add Create local user with `nx-admin` role.
 - Go to Security -> Realms and transfer `npm Bearer Token Realm` to Active cards.
-  ![Nexus_Realm](Nexus_Realm.png)
+  ![Nexus_Realm](images/Nexus_Realm.png)
 - Go to bash and execute the following code and enter Username and Password.
 
 ```sh
@@ -108,10 +122,10 @@ cat ~/.npmrc
 ```
 
 and Copy the lines generate and create a `my.npmrc` file in any directory.
-![Nexus_Creds_Generate](Nexus_Creds_Generate.png)
+![Nexus_Creds_Generate](images/Nexus_Creds_Generate.png)
 
 - Go to Manage Jenkins -> Credentials -> Cick on global and Add New credentials for Nexus. Choose recently create `my.npmrc` file.
-  ![Nexus_Creds_Jenkins](Nexus_Creds_Jenkins.png)
+  ![Nexus_Creds_Jenkins](images/Nexus_Creds_Jenkins.png)
 
 ### Add publishConfig in `package.json` file
 
@@ -227,20 +241,20 @@ pipeline {
 
 - Go to Dashboard -> New Item -> Create a pipeline.
 - Add description, GitHub link to project.
-  ![Job_General](Job_General.png)
+  ![Job_General](images/Job_General.png)
 - In Pipeline section, choose `Pipeline script from SCM` in Defination, choose `Git` as SCM and on repository URL enter GitHub project.
-  ![Job_Pipeline](Job_Pipeline.png)
+  ![Job_Pipeline](images/Job_Pipeline.png)
 - Update specific branch and script path. And click save.
-  ![Job_Jenkins_Path](Job_Jenkins_Path.png)
+  ![Job_Jenkins_Path](images/Job_Jenkins_Path.png)
 
 ### Run the pipeline
 
 - Go to Dashboard and Click `Bulid` button.
-  ![Dashboard_build](Dashboard_build.png)
+  ![Dashboard_build](images/Dashboard_build.png)
 - Message after executing the job
-  ![Job_Completion](Job_Completion.png)
+  ![Job_Completion](images/Job_Completion.png)
 
 ### Check published file in Nexus
 
 - Go to Browser -> click on your hosted repo.
-  ![Nexus_Publish](Nexus_Publish.png)
+  ![Nexus_Publish](images/Nexus_Publish.png)
