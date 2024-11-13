@@ -47,9 +47,8 @@ pipeline {
                     withSonarQubeEnv('SonarQube') { 
                         // sh """${SCANNER_HOME}/bin/sonar-scanner -Dsonar.host.url=http://10.0.0.247:9000/ \
                         sh """${SCANNER_HOME}/bin/sonar-scanner -Dsonar.host.url=http://localhost:9000/ \
-                        -Dsonar.token=squ_ee990db47a9bdffa732b9fea384c2782eb8e56e1 \
-                        -Dsonar.projectName="Book_API" \
-                        -Dsonar.exclusions=**/node_modules/** \
+                        -Dsonar.token=squ_55b9cb9407d8c5810b57b10a9ea114c652611367 \
+                        -Dsonar.projectName="Book_API" \ \
                         -Dsonar.projectKey=Book_API"""
                     } 
                 } 
@@ -63,6 +62,7 @@ pipeline {
                     def qualityGate = waitForQualityGate() 
                     if (qualityGate.status == 'IN_PROGRESS') { 
                         sleep(time: 20, unit: 'SECONDS') // Sleep to wait for the status to update 
+                        qualityGate = waitForQualityGate()
                         error "Quality Gate is still in progress. Retrying..." 
                     } 
                     
