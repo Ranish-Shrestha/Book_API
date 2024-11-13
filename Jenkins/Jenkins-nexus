@@ -12,7 +12,7 @@ pipeline {
         NODEJS_HOME = tool name: 'NodeJS' // Assumes NodeJS is configured in Jenkins tools
         PATH = "${NODEJS_HOME}/bin:${env.PATH}"
         SONARQUBE_SERVER = 'SonarQube'  // Name configured for SonarQube in Jenkins
-        NEXUS_URL = '10.0.0.247:8081' // Nexus URL
+        NEXUS_URL = 'localhost:8081' //'10.0.0.247:8081' // Nexus URL
         NEXUS_REPO = 'npm-book-repo'
         NEXUS_CREDENTIALS_ID = 'npm-nexus-creds' // Jenkins credentials ID for Nexus
     }
@@ -35,7 +35,8 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'npm-nexus-creds', variable: 'mynpmrc')]) {
                     echo 'Building...'
-                    sh 'npm install --userconfig $mynpmrc --registry http://10.0.0.247:8081/repository/npm-book-repo --loglevel verbose'
+                    // sh 'npm install --userconfig $mynpmrc --registry http://10.0.0.247:8081/repository/npm-book-repo --loglevel verbose'
+                    sh 'npm install --userconfig $mynpmrc --registry http://localhost:8081/repository/npm-book-repo --loglevel verbose'
                 }
             }
         }
@@ -44,7 +45,8 @@ pipeline {
             steps { 
                 script { 
                     withSonarQubeEnv('SonarQube') { 
-                        sh """${SCANNER_HOME}/bin/sonar-scanner -Dsonar.host.url=http://10.0.0.247:9000/ \
+                        // sh """${SCANNER_HOME}/bin/sonar-scanner -Dsonar.host.url=http://10.0.0.247:9000/ \
+                        sh """${SCANNER_HOME}/bin/sonar-scanner -Dsonar.host.url=http://localhost:9000/ \
                         -Dsonar.token=squ_ee990db47a9bdffa732b9fea384c2782eb8e56e1 \
                         -Dsonar.projectName="Book_API" \
                         -Dsonar.exclusions=**/node_modules/** \
