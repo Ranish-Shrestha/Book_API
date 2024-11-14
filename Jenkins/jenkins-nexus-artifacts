@@ -86,7 +86,7 @@ pipeline {
                         ]
                     ],
                     credentialsId: "${NEXUS_CREDENTIALS_ID}",
-                    groupId: 'com.example',
+                    groupId: 'bookapi',
                     protocol: "${NEXUS_PROTOCOL}",
                     nexusUrl: "${NEXUS_URL}",
                     repository: "${NEXUS_REPO}",
