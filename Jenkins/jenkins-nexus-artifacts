@@ -34,10 +34,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                sh 'npm run build'  // Assumes build command is defined in package.json
-
-                echo 'Zipping...'
-                sh 'zip -r dist/my-app.zip *'
+                sh 'npm run build'
             }
         }
 
