@@ -53,21 +53,10 @@ pipeline {
         stage('Quality Gate') {
             steps {
                 script {
-                    sleep(time: 20, unit: 'SECONDS') // Sleep to wait for the status to update
-                    def qualityGate = waitForQualityGate()
-                    if (qualityGate.status == 'IN_PROGRESS') {
-                        error "Quality Gate is still in progress. Retrying..."
-                    }
+                    echo "Quality Gate is still in progress..."
 
                     timeout(time: 1, unit: 'MINUTES') {
                         waitForQualityGate abortPipeline: true
-                    }
-
-                    if (qualityGate.status != 'OK' || qualityGate.status != 'SUCCESS') {
-                        error "Quality Gate failed: ${qualityGate.status}"
-                    }
-                    else {
-                        echo "Quality Gate passed: ${qualityGate.status}"
                     }
                 }
             }
