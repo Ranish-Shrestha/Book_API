@@ -29,7 +29,7 @@ pipeline {
             steps {
                 echo 'Building...'
                 sh 'npm install'
-                bat 'npm run build'
+                sh 'npm run build'
             }
         }
 
