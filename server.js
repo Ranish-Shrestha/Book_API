@@ -6,7 +6,12 @@ const bookRoutes = require('./routes/bookRoutes');
 const PORT = 9090;
 
 // middleware
-app.use(cors());
+
+let corsOptions = {
+    origin: '*'
+};
+
+app.use(cors(corsOptions));
 app.use(express.json()); // req.body
 
 // Routes
