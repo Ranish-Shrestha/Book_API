@@ -12,6 +12,7 @@ let corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.disable("x-powered-by");
 app.use(express.json()); // req.body
 
 // Routes
