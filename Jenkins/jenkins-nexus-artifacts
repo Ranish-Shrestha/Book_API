@@ -81,7 +81,7 @@ pipeline {
                         [
                             artifactId: 'my-app',
                             classifier: '',
-                            file: 'dist/*.js',
+                            file: 'dist/server.js',
                             type: 'zip'
                         ]
                     ],
