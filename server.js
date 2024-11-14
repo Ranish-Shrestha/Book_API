@@ -8,7 +8,7 @@ const PORT = 9090;
 // middleware
 
 let corsOptions = {
-    origin: '*'
+    origin: 'trustedwebsite.com' // Compliant
 };
 
 app.use(cors(corsOptions));
