@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "build": "webpack --config webpack.config.js",
-    "package": "mkdir -p publish && cd dist && zip -r ../publish/my-app.zip ."
+    "package": "rm -f publish/my-app.zip && mkdir -p publish && cd dist && zip -r ../publish/my-app.zip ."
   },
   "publishConfig": {
     "registry": "http://10.0.0.247:8081/repository/npm-book-repo/"
