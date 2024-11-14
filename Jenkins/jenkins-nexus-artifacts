@@ -81,8 +81,8 @@ pipeline {
                         [
                             artifactId: 'my-app',
                             classifier: '',
-                            file: 'dist/my-app.zip',
-                            type: 'zip'
+                            file: 'dist/**',
+                            type: '*'
                         ]
                     ],
                     credentialsId: "${NEXUS_CREDENTIALS_ID}",
