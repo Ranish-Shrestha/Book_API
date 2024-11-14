@@ -31,6 +31,7 @@ pipeline {
                 sh 'chmod +x node_modules/.bin/*'
                 sh 'npm install'
                 sh 'npm run build'
+                sh 'npm run package'
             }
         }
 
@@ -70,7 +71,7 @@ pipeline {
 
         stage('Archive Artifact') {
             steps {
-                archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'publish/**', allowEmptyArchive: true
             }
         }
 
@@ -83,7 +84,7 @@ pipeline {
                         [
                             artifactId: 'my-app',
                             classifier: '',
-                            file: 'dist/server.js',
+                            file: 'publish/my-app.zip',
                             type: 'zip'
                         ]
                     ],
