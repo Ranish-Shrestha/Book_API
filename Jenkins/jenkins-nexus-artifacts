@@ -28,6 +28,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
+                sh 'chmod +x node_modules/.bin/*'
                 sh 'npm install'
                 sh 'npm run build'
             }
