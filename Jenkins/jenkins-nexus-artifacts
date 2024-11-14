@@ -59,7 +59,11 @@ pipeline {
                         error "Quality Gate is still in progress. Retrying..."
                     }
 
-                    if (qualityGate.status != 'OK') {
+                    timeout(time: 1, unit: 'MINUTES') {
+                        waitForQualityGate abortPipeline: true
+                    }
+
+                    if (qualityGate.status != 'OK' || qualityGate.status != 'SUCCESS') {
                         error "Quality Gate failed: ${qualityGate.status}"
                     }
                     else {
