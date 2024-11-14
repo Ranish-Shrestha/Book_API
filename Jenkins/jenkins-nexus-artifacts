@@ -1,0 +1,113 @@
+pipeline {
+    agent any
+
+    tools {
+        nodejs('NodeJS')
+    }
+
+    environment {
+        SCANNER_HOME = tool 'SonarQubeScanner'
+        NEXUS_VERSION = "nexus3"
+        NEXUS_PROTOCOL = "http"
+        NODEJS_HOME = tool name: 'NodeJS' // Assumes NodeJS is configured in Jenkins tools
+        PATH = "${NODEJS_HOME}/bin:${env.PATH}"
+        SONARQUBE_SERVER = 'SonarQube'  // Name configured for SonarQube in Jenkins
+        NEXUS_URL = '10.0.0.247:8081' // Nexus URL
+        NEXUS_REPO = 'npm-book-repo'
+        NEXUS_CREDENTIALS_ID = 'nexus-user-credentials' // Jenkins credentials ID for Nexus
+    }
+
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building...'
+                sh 'npm run build'  // Assumes build command is defined in package.json
+            }
+        }
+
+
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    withSonarQubeEnv('SonarQube') {
+                        sh """${SCANNER_HOME}/bin/sonar-scanner -Dsonar.host.url=http://10.0.0.247:9000/ \
+                        -Dsonar.token=squ_d216dda9f3c08bd2d5e093373b0ced7f2d09c050 \
+                        -Dsonar.projectName="Book_API" \
+                        -Dsonar.exclusions=**/node_modules/** \
+                        -Dsonar.projectKey=Book_API"""
+                    }
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                script {
+                    sleep(time: 20, unit: 'SECONDS') // Sleep to wait for the status to update
+                    def qualityGate = waitForQualityGate()
+                    if (qualityGate.status == 'IN_PROGRESS') {
+                        error "Quality Gate is still in progress. Retrying..."
+                    }
+
+                    if (qualityGate.status != 'OK') {
+                        error "Quality Gate failed: ${qualityGate.status}"
+                    }
+                    else {
+                        echo "Quality Gate passed: ${qualityGate.status}"
+                    }
+                }
+            }
+        }
+
+        stage('Archive Artifact') {
+            steps {
+                archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: true
+            }
+        }
+
+        stage('Publish to Nexus') {
+            steps {
+                echo 'Publishing to Nexus...'
+                nexusArtifactUploader(
+                    nexusVersion: "${NEXUS_VERSION}",
+                    artifacts: [
+                        [
+                            artifactId: 'my-app',
+                            classifier: '',
+                            file: 'dist/my-app.zip',
+                            type: 'zip'
+                        ]
+                    ],
+                    credentialsId: "${NEXUS_CREDENTIALS_ID}",
+                    groupId: 'com.example',
+                    protocol: "${NEXUS_PROTOCOL}",
+                    nexusUrl: "${NEXUS_URL}",
+                    repository: "${NEXUS_REPO}",
+                    version: '1.0.0'
+                )
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed.'
+        }
+    }
+}
