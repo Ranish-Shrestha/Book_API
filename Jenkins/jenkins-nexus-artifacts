@@ -96,15 +96,15 @@ pipeline {
                     protocol: "${NEXUS_PROTOCOL}",
                     nexusUrl: "${NEXUS_URL}",
                     credentialsId: "${NEXUS_CREDENTIALS_ID}",
-                    groupId: '',
+                    groupId: 'bookapi',
                     repository: "${NEXUS_REPO}",
                     version: '1.0.2',
                     artifacts: [
                         [
                             artifactId: 'my-app',   
                             classifier: '',
-                            file: 'publish/my-app.zip',
-                            type: 'zip'
+                            file: 'publish/my-app.tgz',
+                            type: 'tgz'
                         ]
                     ]
                 )
