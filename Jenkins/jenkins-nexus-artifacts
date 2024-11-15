@@ -84,23 +84,28 @@ pipeline {
         stage('Publish to Nexus') {
             steps {
                 echo 'Publishing to Nexus...'
-                nexusArtifactUploader(
-                    nexusVersion: "${NEXUS_VERSION}",
-                    artifacts: [
-                        [
-                            artifactId: 'my-app',
-                            classifier: '',
-                            file: 'publish/my-app.zip',
-                            type: 'zip'
-                        ]
-                    ],
-                    credentialsId: "${NEXUS_CREDENTIALS_ID}",
-                    groupId: 'bookapi',
-                    protocol: "${NEXUS_PROTOCOL}",
-                    nexusUrl: "${NEXUS_URL}",
-                    repository: "${NEXUS_REPO}",
-                    version: '1.0.2'
-                )
+                try{
+                    nexusArtifactUploader(
+                        nexusVersion: "${NEXUS_VERSION}",
+                        artifacts: [
+                            [
+                                artifactId: 'my-app',
+                                classifier: '',
+                                file: 'publish/my-app.zip',
+                                type: 'zip'
+                            ]
+                        ],
+                        credentialsId: "${NEXUS_CREDENTIALS_ID}",
+                        groupId: 'bookapi',
+                        protocol: "${NEXUS_PROTOCOL}",
+                        nexusUrl: "${NEXUS_URL}",
+                        repository: "${NEXUS_REPO}",
+                        version: '1.0.2'
+                    )
+                }catch (Exception e) { 
+                    echo "Error during publishing: ${e.message}" 
+                    echo "Failed to deploy artifacts: ${e.message}" 
+                }
             }
         }
     }
