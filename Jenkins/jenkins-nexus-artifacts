@@ -84,8 +84,8 @@ pipeline {
         }
 
         stage('Publish to Nexus') {
-            echo "Publishing to Nexus repository `${NEXUS_REPO}`..."
             steps {
+                echo "Publishing to Nexus repository `${NEXUS_REPO}`..."
                 nexusArtifactUploader artifacts: [
                     [ 
                         artifactId: 'BOOK_API', 
