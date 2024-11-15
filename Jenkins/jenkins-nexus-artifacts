@@ -99,9 +99,9 @@ pipeline {
                     groupId: 'bookapi',
                     repository: "${NEXUS_REPO}",
                     version: '1.0.2',
-                    artifactId: 'my-app',
                     artifacts: [
                         [
+                            artifactId: 'my-app',   
                             classifier: '',
                             file: 'publish/my-app.zip',
                             type: 'zip'
