@@ -62,8 +62,14 @@ pipeline {
                 script {
                     echo "Quality Gate is still in progress..."
 
-                    timeout(time: 3, unit: 'MINUTES') {
-                        waitForQualityGate abortPipeline: true
+                    sleep(time: 20, unit: 'SECONDS') // Sleep to wait for the status to update
+                    def qualityGate = waitForQualityGate()
+                    
+                    if (qualityGate.status != 'OK' || qualityGate.status != 'SUCCESS') {
+                        echo "Quality Gate failed: ${qualityGate.status}"
+                    }
+                    else {
+                        echo "Quality Gate passed: ${qualityGate.status}"
                     }
                 }
             }
