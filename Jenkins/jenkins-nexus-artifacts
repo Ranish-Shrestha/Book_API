@@ -49,7 +49,7 @@ pipeline {
                         sh """${SCANNER_HOME}/bin/sonar-scanner -Dsonar.host.url=http://10.0.0.247:9000/ \
                         -Dsonar.token=squ_d216dda9f3c08bd2d5e093373b0ced7f2d09c050 \
                         -Dsonar.projectName="Book_API" \
-                        -Dsonar.exclusions=**/node_modules/**,**/coverage/**,**/test/** \
+                        -Dsonar.exclusions=**/node_modules/**,**/coverage/**,**/__tests__/** \
                         -Dsonar.projectKey=Book_API \
                         -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info -Dsonar.test.inclusions=tests/**/*.test.js"""
                     }

@@ -1,8 +1,10 @@
+const pool = require('../config/db');
+const bookRoutes = require('../routes/bookRoutes');
 const request = require('supertest');
 const express = require('express');
-const bookRoutes = require('../routes/bookRoutes');
 const bodyParser = require('body-parser');
-const pool = require('../config/db');
+const app = express();
+const PORT = 9090;
 
 // Mock pool.query
 jest.mock('../config/db', () => {
@@ -11,15 +13,12 @@ jest.mock('../config/db', () => {
     };
 });
 
-const app = express();
-const PORT = 9090;
-
-// middleware
-
 let corsOptions = {
     origin: 'trustedwebsite.com' // Compliant
 };
 
+
+// middleware
 app.use(require('cors')(corsOptions));
 app.disable("x-powered-by");
 app.use(express.json()); // req.body
