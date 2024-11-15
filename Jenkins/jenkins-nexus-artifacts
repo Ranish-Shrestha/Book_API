@@ -96,7 +96,7 @@ pipeline {
                     protocol: "${NEXUS_PROTOCOL}",
                     nexusUrl: "${NEXUS_URL}",
                     credentialsId: "${NEXUS_CREDENTIALS_ID}",
-                    groupId: 'bookapi',
+                    groupId: '',
                     repository: "${NEXUS_REPO}",
                     version: '1.0.2',
                     artifacts: [
