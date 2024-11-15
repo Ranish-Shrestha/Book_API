@@ -95,18 +95,19 @@ pipeline {
                 // http://10.0.0.247:8081/repository/npm-book-repo/book_api/-/book_api-1.0.1.tgz
                 // http://10.0.0.247:8081/repository/npm-book-repo/npmapi/bookapi/book-api/1.0.2/book-api-1.0.2.tgz
                 // http://10.0.0.247:8081/repository/npm-book-repo/book_api/book_api/1.0.2/book_api-1.0.2--.tgz
+                // http://10.0.0.247:8081/repository/npm-book-repo/book_api/-/1.0.2/--1.0.2.tgz
                 echo "Publishing to Nexus repository `${NEXUS_REPO}`..."
                 nexusArtifactUploader(
                     nexusVersion: "${NEXUS_VERSION}",
                     protocol: "${NEXUS_PROTOCOL}",
                     nexusUrl: "${NEXUS_URL}",
                     credentialsId: "${NEXUS_CREDENTIALS_ID}",
-                    groupId: 'book_api',
-                    repository: "${NEXUS_REPO}",
+                    groupId: 'book',
+                    repository: "${NEXUS_REPO}/",
                     version: '1.0.2',
                     artifacts: [
                         [
-                            artifactId: '-',   
+                            artifactId: 'book_api',   
                             classifier: '',
                             file: 'publish/my-app.tgz',
                             type: 'tgz'
