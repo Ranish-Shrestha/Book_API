@@ -7,7 +7,7 @@
     "start": "node server.js",
     "build": "webpack --config webpack.config.js",
     "test": "jest --coverage --passWithNoTests",
-    "package": "rm -f publish/my-app.zip && mkdir -p publish && cd dist && tar -czvf ../publish/my-app.tgz ."
+    "package": "rm -f publish/my-app.tgz && mkdir -p publish && cd dist && tar -czvf ../publish/my-app.tgz ."
   },
   "publishConfig": {
     "registry": "http://10.0.0.247:8081/repository/npm-book-repo/"

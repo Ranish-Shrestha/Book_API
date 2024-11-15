@@ -103,19 +103,22 @@ docker-compose up -d
 - Go to Security -> Users. Add Create local user with `nx-admin` role.
 - Go to Security -> Realms and transfer `npm Bearer Token Realm` to Active cards.
   ![Nexus_Realm](images/Nexus_Realm.png)
+
+## To publish file using npm publish
+
 - Go to bash and execute the following code and enter Username and Password.
 
 ```sh
 npm login --registry=http://10.0.0.247:8081/repository/npm-book-group/
 ```
 
-Similarly, again execute the following code and enter the same Username and Password.
+- Similarly, again execute the following code and enter the same Username and Password.
 
 ```sh
 npm login --registry=http://10.0.0.247:8081/repository/npm-book-repo/
 ```
 
-Finally, execute the following code.
+- Finally, execute the following code.
 
 ```sh
 cat ~/.npmrc
@@ -124,7 +127,7 @@ cat ~/.npmrc
 and Copy the lines generate and create a `my.npmrc` file in any directory.
 ![Nexus_Creds_Generate](images/Nexus_Creds_Generate.png)
 
-- Go to Manage Jenkins -> Credentials -> Cick on global and Add New credentials for Nexus. Choose recently create `my.npmrc` file.
+- Go to Manage Jenkins -> Credentials -> Cick on global and Add New credentials for Nexus. Choose recently created `my.npmrc` file.
   ![Nexus_Creds_Jenkins](images/Nexus_Creds_Jenkins.png)
 
 ### Add publishConfig in `package.json` file
@@ -237,12 +240,12 @@ pipeline {
 
 ```
 
-### Create a Job in Jenkins
+### Create a Pipeline in Jenkins
 
 - Go to Dashboard -> New Item -> Create a pipeline.
 - Add description, GitHub link to project.
   ![Job_General](images/Job_General.png)
-- In Pipeline section, choose `Pipeline script from SCM` in Defination, choose `Git` as SCM and on repository URL enter GitHub project.
+- In the Pipeline section, choose `Pipeline script from SCM` in Defination, choose `Git` as SCM and on repository URL enter GitHub project.
   ![Job_Pipeline](images/Job_Pipeline.png)
 - Update specific branch and script path. And click save.
   ![Job_Jenkins_Path](images/Job_Jenkins_Path.png)
@@ -251,10 +254,156 @@ pipeline {
 
 - Go to Dashboard and Click `Bulid` button.
   ![Dashboard_build](images/Dashboard_build.png)
-- Message after executing the job
+- Message after executing the job.
   ![Job_Completion](images/Job_Completion.png)
 
 ### Check published file in Nexus
 
 - Go to Browser -> click on your hosted repo.
   ![Nexus_Publish](images/Nexus_Publish.png)
+
+## To publish project files using Artifact
+
+### Install Webpack
+
+```sh
+  npm install --save-dev webpack webpack-cli
+```
+
+### Add following lines in `package.json` file inside "scripts"
+
+```sh
+ "build": "webpack --config webpack.config.js",
+  "package": "rm -f publish/my-app.tgz && mkdir -p publish && cd dist && tar -czvf ../publish/my-app.tgz ."
+```
+
+### Make a new Jenkins file
+
+```sh
+pipeline {
+    agent any
+
+    tools {
+        nodejs('NodeJS')
+    }
+
+    environment {
+        NODEJS_HOME = tool name: 'NodeJS' // Assumes NodeJS is configured in Jenkins tools
+        PATH = "${NODEJS_HOME}/bin:${env.PATH}"
+
+        SCANNER_HOME = tool 'SonarQubeScanner'
+        SONARQUBE_SERVER = 'SonarQube'  // Name configured for SonarQube in Jenkins
+
+        NEXUS_VERSION = "nexus3"
+        NEXUS_PROTOCOL = "http"
+        NEXUS_URL = '10.0.0.247:8081' // Nexus URL
+        NEXUS_REPO = 'book-repo'
+        NEXUS_CREDENTIALS_ID = 'nexus-user-credentials' // Jenkins credentials ID for Nexus
+    }
+
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building...'
+                sh 'chmod +x node_modules/.bin/*'
+                sh 'npm install'
+                sh 'npm run build'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                echo 'Running Tests...'
+                sh 'npm test'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    withSonarQubeEnv('SonarQube') {
+                        sh """${SCANNER_HOME}/bin/sonar-scanner -Dsonar.host.url=http://10.0.0.247:9000/ \
+                        -Dsonar.token=squ_d216dda9f3c08bd2d5e093373b0ced7f2d09c050 \
+                        -Dsonar.projectName="Book_API" \
+                        -Dsonar.exclusions=**/node_modules/**,**/coverage/**,**/__tests__/** \
+                        -Dsonar.projectKey=Book_API \
+                        -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info -Dsonar.test.inclusions=tests/**/*.test.js"""
+                    }
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                script {
+                    echo "Quality Gate is still in progress..."
+
+                    sleep(time: 20, unit: 'SECONDS') // Sleep to wait for the status to update
+                    def qualityGate = waitForQualityGate()
+
+                    if (qualityGate.status != 'OK' || qualityGate.status != 'SUCCESS') {
+                        echo "Quality Gate failed: ${qualityGate.status}"
+                    }
+                    else {
+                        echo "Quality Gate passed: ${qualityGate.status}"
+                    }
+                }
+            }
+        }
+
+        stage('Package') {
+            steps {
+                echo 'Packing...'
+                sh 'npm run package'
+            }
+        }
+
+        stage('Publish to Nexus') {
+            steps {
+                echo "Publishing to Nexus repository `${NEXUS_REPO}`..."
+                nexusArtifactUploader artifacts: [
+                    [
+                        artifactId: 'BOOK_API',
+                        classifier: '',
+                        file: 'publish/my-app.tgz',
+                        type: 'tgz'
+                    ]
+                ],
+                credentialsId: "${NEXUS_CREDENTIALS_ID}",
+                groupId: 'np.book',
+                nexusUrl: "${NEXUS_URL}",
+                nexusVersion: "${NEXUS_VERSION}",
+                protocol: "${NEXUS_PROTOCOL}",
+                repository: "${NEXUS_REPO}",
+                version: '1.0.2'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed.'
+        }
+    }
+}
+```
+
+### Create and Run Jenkins Pipeline as previous step
+
+- Job Success
+  ![Job_Success](images/Job_Success.png)
+
+### Check published file in Nexus
+
+- Go to Browser -> click on your hosted repo.
+  ![Nexus_Publish_Artifact](images/Nexus_Publish_Artifact.png)
