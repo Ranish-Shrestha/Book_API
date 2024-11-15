@@ -43,10 +43,7 @@ pipeline {
                         -Dsonar.token=squ_d216dda9f3c08bd2d5e093373b0ced7f2d09c050 \
                         -Dsonar.projectName="Book_API" \
                         -Dsonar.exclusions=**/node_modules/** \
-                        -Dsonar.projectKey=Book_API \
-                        -Dsonar.tests=tests sonar.test.inclusions=tests/**/*.test.js \
-                        -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info 
-                        """
+                        -Dsonar.projectKey=Book_API"""
                     }
                 }
             }
