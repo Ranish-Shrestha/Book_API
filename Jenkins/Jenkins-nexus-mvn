@@ -36,7 +36,7 @@ pipeline {
                         artifactId: 'NETFLIX', 
                         classifier: '', 
                         file: 'target/NETFLIX-1.2.2.war', 
-                        type: '.war'
+                        type: 'war'
                     ]
                 ], 
                 credentialsId: 'nexus-user-credentials', 

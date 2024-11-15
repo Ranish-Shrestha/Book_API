@@ -91,16 +91,24 @@ pipeline {
                         artifactId: 'BOOK_API', 
                         classifier: '', 
                         file: 'publish/my-app.tgz', 
-                        type: '.tgz'
+                        type: 'tgz'
                     ]
                 ], 
-                credentialsId: "${NEXUS_CREDENTIALS_ID}", 
+                credentialsId: 'nexus-user-credentials', 
                 groupId: 'np.book', 
-                nexusUrl: "${NEXUS_URL}", 
-                nexusVersion: "${NEXUS_VERSION}", 
-                protocol: "${NEXUS_PROTOCOL}", 
-                repository: "${NEXUS_REPO}", 
+                nexusUrl: '10.0.0.247:8081', 
+                nexusVersion: 'nexus3', 
+                protocol: 'http', 
+                repository: 'book-repo', 
                 version: '1.0.2'
+
+                // credentialsId: "${NEXUS_CREDENTIALS_ID}", 
+                // groupId: 'np.book', 
+                // nexusUrl: "${NEXUS_URL}", 
+                // nexusVersion: "${NEXUS_VERSION}", 
+                // protocol: "${NEXUS_PROTOCOL}", 
+                // repository: "${NEXUS_REPO}", 
+                // version: '1.0.2'
             }
         }
     }
