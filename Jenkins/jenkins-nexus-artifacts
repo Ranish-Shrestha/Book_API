@@ -14,7 +14,7 @@ pipeline {
         
         NEXUS_VERSION = "nexus3"
         NEXUS_PROTOCOL = "http"
-        NEXUS_URL = '10.0.0.247:8081' // Nexus URL
+        NEXUS_URL = 'http://10.0.0.247:8081' // Nexus URL
         NEXUS_REPO = 'npm-book-repo'
         NEXUS_CREDENTIALS_ID = 'nexus-user-credentials' // Jenkins credentials ID for Nexus
     }
@@ -84,18 +84,10 @@ pipeline {
             }
         }
 
-        stage('Archive Artifact') {
-            steps {
-                archiveArtifacts artifacts: 'publish/**', allowEmptyArchive: true
-            }
-        }
-
         stage('Publish to Nexus') {
             steps {
                 // http://10.0.0.247:8081/repository/npm-book-repo/book_api/-/book_api-1.0.1.tgz
-                // http://10.0.0.247:8081/repository/npm-book-repo/npmapi/bookapi/book-api/1.0.2/book-api-1.0.2.tgz
-                // http://10.0.0.247:8081/repository/npm-book-repo/book_api/book_api/1.0.2/book_api-1.0.2--.tgz
-                // http://10.0.0.247:8081/repository/npm-book-repo/book_api/-/1.0.2/--1.0.2.tgz
+                // http://10.0.0.247:8081/repository/npm-book-repo/book/book_api/1.0.2/book_api-1.0.2.tgz
                 echo "Publishing to Nexus repository `${NEXUS_REPO}`..."
                 nexusArtifactUploader(
                     nexusVersion: "${NEXUS_VERSION}",
@@ -103,7 +95,7 @@ pipeline {
                     nexusUrl: "${NEXUS_URL}",
                     credentialsId: "${NEXUS_CREDENTIALS_ID}",
                     groupId: 'book',
-                    repository: "${NEXUS_REPO}/",
+                    repository: "${NEXUS_REPO}",
                     version: '1.0.2',
                     artifacts: [
                         [
