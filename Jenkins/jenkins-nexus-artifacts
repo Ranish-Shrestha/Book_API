@@ -94,13 +94,13 @@ pipeline {
                         type: '.tgz'
                     ]
                 ], 
-                credentialsId: 'nexus-user-credentials', 
+                credentialsId: "${NEXUS_CREDENTIALS_ID}", 
                 groupId: 'np.book', 
-                nexusUrl: '10.0.0.247:8081', 
-                nexusVersion: 'nexus3', 
-                protocol: 'http', 
-                repository: 'netflix', 
-                version: '1.2.2'
+                nexusUrl: "${NEXUS_URL}", 
+                nexusVersion: "${NEXUS_VERSION}", 
+                protocol: "${NEXUS_PROTOCOL}", 
+                repository: "${NEXUS_REPO}", 
+                version: '1.0.2'
             }
         }
     }

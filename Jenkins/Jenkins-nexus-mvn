@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+
+    tools {
+        maven "maven3"
+    }
+    
+    stages {
+        stage('checkout') {
+            steps {
+                git 'https://github.com/SumitJadhav-01/jenkins-java-project.git'
+            }
+        }
+        
+        stage('build') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
+        
+        stage('test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        
+        stage('artifact') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+        stage('Artifact upload') {
+            steps {
+                nexusArtifactUploader artifacts: [
+                    [ 
+                        artifactId: 'NETFLIX', 
+                        classifier: '', 
+                        file: 'target/NETFLIX-1.2.2.war', 
+                        type: '.war'
+                    ]
+                ], 
+                credentialsId: 'nexus-user-credentials', 
+                groupId: 'in.RAHAM', 
+                nexusUrl: '10.0.0.247:8081', 
+                nexusVersion: 'nexus3', 
+                protocol: 'http', 
+                repository: 'netflix', 
+                version: '1.2.2'
+            }
+        }
+    }
+}
