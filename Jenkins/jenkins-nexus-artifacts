@@ -15,7 +15,7 @@ pipeline {
         NEXUS_VERSION = "nexus3"
         NEXUS_PROTOCOL = "http"
         NEXUS_URL = '10.0.0.247:8081' // Nexus URL
-        NEXUS_REPO = 'npm-book-repo'
+        NEXUS_REPO = 'book-repo'
         NEXUS_CREDENTIALS_ID = 'nexus-user-credentials' // Jenkins credentials ID for Nexus
     }
 
@@ -94,21 +94,13 @@ pipeline {
                         type: 'tgz'
                     ]
                 ], 
-                credentialsId: 'nexus-user-credentials', 
+                credentialsId: "${NEXUS_CREDENTIALS_ID}", 
                 groupId: 'np.book', 
-                nexusUrl: '10.0.0.247:8081', 
-                nexusVersion: 'nexus3', 
-                protocol: 'http', 
-                repository: 'book-repo', 
+                nexusUrl: "${NEXUS_URL}", 
+                nexusVersion: "${NEXUS_VERSION}", 
+                protocol: "${NEXUS_PROTOCOL}", 
+                repository: "${NEXUS_REPO}", 
                 version: '1.0.2'
-
-                // credentialsId: "${NEXUS_CREDENTIALS_ID}", 
-                // groupId: 'np.book', 
-                // nexusUrl: "${NEXUS_URL}", 
-                // nexusVersion: "${NEXUS_VERSION}", 
-                // protocol: "${NEXUS_PROTOCOL}", 
-                // repository: "${NEXUS_REPO}", 
-                // version: '1.0.2'
             }
         }
     }
