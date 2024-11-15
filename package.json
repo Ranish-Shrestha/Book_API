@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "build": "webpack --config webpack.config.js",
+    "test": "jest --coverage --passWithNoTests",
     "package": "rm -f publish/my-app.zip && mkdir -p publish && cd dist && zip -r ../publish/my-app.zip ."
   },
   "publishConfig": {
@@ -20,7 +21,25 @@
     "pg": "^8.13.0"
   },
   "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0",
     "webpack": "^5.96.1",
     "webpack-cli": "^5.1.4"
+  },
+  "jest": {
+    "testMatch": [
+      "**/__tests__/**/*.[jt]s?(x)",
+      "**/?(*.)+(spec|test).[tj]s?(x)"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "server.js"
+    ],
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text",
+      "clover"
+    ]
   }
 }
