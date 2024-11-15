@@ -31,7 +31,6 @@ pipeline {
                 sh 'chmod +x node_modules/.bin/*'
                 sh 'npm install'
                 sh 'npm run build'
-                sh 'npm run package'
             }
         }
 
@@ -75,6 +74,14 @@ pipeline {
             }
         }
 
+        stage('Package') { 
+            steps { 
+                echo 'Packing...'
+                sh 'npm run package' 
+                sh 'ls -la publish' // List the contents of the publish directory 
+            }
+        }
+
         stage('Archive Artifact') {
             steps {
                 archiveArtifacts artifacts: 'publish/**', allowEmptyArchive: true
@@ -84,28 +91,23 @@ pipeline {
         stage('Publish to Nexus') {
             steps {
                 echo 'Publishing to Nexus...'
-                try{
-                    nexusArtifactUploader(
-                        nexusVersion: "${NEXUS_VERSION}",
-                        artifacts: [
-                            [
-                                artifactId: 'my-app',
-                                classifier: '',
-                                file: 'publish/my-app.zip',
-                                type: 'zip'
-                            ]
-                        ],
-                        credentialsId: "${NEXUS_CREDENTIALS_ID}",
-                        groupId: 'bookapi',
-                        protocol: "${NEXUS_PROTOCOL}",
-                        nexusUrl: "${NEXUS_URL}",
-                        repository: "${NEXUS_REPO}",
-                        version: '1.0.2'
-                    )
-                }catch (Exception e) { 
-                    echo "Error during publishing: ${e.message}" 
-                    echo "Failed to deploy artifacts: ${e.message}" 
-                }
+                nexusArtifactUploader(
+                    nexusVersion: "${NEXUS_VERSION}",
+                    artifacts: [
+                        [
+                            artifactId: 'my-app',
+                            classifier: '',
+                            file: 'publish/my-app.zip',
+                            type: 'zip'
+                        ]
+                    ],
+                    credentialsId: "${NEXUS_CREDENTIALS_ID}",
+                    groupId: 'bookapi',
+                    protocol: "${NEXUS_PROTOCOL}",
+                    nexusUrl: "${NEXUS_URL}",
+                    repository: "${NEXUS_REPO}",
+                    version: '1.0.2'
+                )
             }
         }
     }
