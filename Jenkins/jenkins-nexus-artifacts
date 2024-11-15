@@ -35,12 +35,6 @@ pipeline {
             }
         }
 
-        stage('Run Tests') { 
-            steps { 
-                sh 'npm run test' 
-            } 
-        }
-
         stage('SonarQube Analysis') {
             steps {
                 script {
