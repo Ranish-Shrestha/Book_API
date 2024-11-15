@@ -90,23 +90,23 @@ pipeline {
 
         stage('Publish to Nexus') {
             steps {
-                echo 'Publishing to Nexus...'
+                echo "Publishing to Nexus repository ${NEXUS_REPO}..."
                 nexusArtifactUploader(
                     nexusVersion: "${NEXUS_VERSION}",
+                    protocol: "${NEXUS_PROTOCOL}",
+                    nexusUrl: "${NEXUS_URL}",
+                    credentialsId: "${NEXUS_CREDENTIALS_ID}",
+                    groupId: 'bookapi',
+                    repository: "${NEXUS_REPO}",
+                    version: '1.0.2',
+                    artifactId: 'my-app',
                     artifacts: [
                         [
-                            artifactId: 'my-app',
                             classifier: '',
                             file: 'publish/my-app.zip',
                             type: 'zip'
                         ]
-                    ],
-                    credentialsId: "${NEXUS_CREDENTIALS_ID}",
-                    groupId: 'bookapi',
-                    protocol: "${NEXUS_PROTOCOL}",
-                    nexusUrl: "${NEXUS_URL}",
-                    repository: "${NEXUS_REPO}",
-                    version: '1.0.2'
+                    ]
                 )
             }
         }
